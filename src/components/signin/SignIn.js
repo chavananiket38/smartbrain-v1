@@ -1,9 +1,10 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 
 const SignIn = ({ onRouteChange, loadUser }) => {
 
     const [Email, setEmail] = useState('');
     const [Password, setPassword] = useState('');
+    const inputEl = useRef(null);
 
     const onEmailChange = (event) => {
         setEmail(event.target.value);
@@ -13,7 +14,12 @@ const SignIn = ({ onRouteChange, loadUser }) => {
         setPassword(event.target.value);
     }
 
-    const onSubmit = () => {
+    const onFormSubmit = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    const onSubmit = (e) => {
         fetch(" https://nameless-citadel-65461.herokuapp.com/signin", {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
@@ -25,31 +31,25 @@ const SignIn = ({ onRouteChange, loadUser }) => {
         .then(res => res.json())
         .then(user => {
             if(!Email || !Password){
-                const text = document.getElementById('textError');
-                text.textContent = "All fields are required";
-            }else if(user.id){
+                inputEl.current.innerHTML = "All fields are required";
+            }
+            else if(user.id){
                 loadUser(user);
                 onRouteChange('home');
+            }else{
+                inputEl.current.innerHTML = "Invalid Input or Wrong credentials";
             }
-            else{
-                const text = document.getElementById('textError');
-                text.textContent = "User Not Found or wrong credentials";
-            }
-        })
-        .catch(err => {
-            const text = document.getElementById('textError');
-            text.textContent = "User Not Found";
         })
     }
 
     return(
         <article className="br3 ba mv4 w-100 w-50-m w-25-l mw5 shadow-5 center" style={{marginTop: "70px"}}>
             <main className="pa4 black-80">
-                <form className="measure ">
+                <form className="measure " onSubmit={onFormSubmit}>
                     <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
                     <legend className="f4 fw6 ph0 mh0">Sign In</legend>
+                    <div  ref={inputEl} style={{color: "white"}}> </div>
                     <div className="mt3">
-                        <div id="textError" style={{color: "white"}}> </div>
                         <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
                         <input 
                             className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
@@ -72,7 +72,7 @@ const SignIn = ({ onRouteChange, loadUser }) => {
                     </fieldset>
                     <div className="">
                     <input 
-                        onClick={onSubmit}
+                        onClick={(e) => {onSubmit(e)}}
                         className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" 
                         type="submit" 
                         value="Sign in"

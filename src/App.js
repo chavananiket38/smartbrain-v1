@@ -40,11 +40,11 @@ class App extends React.Component{
     }})
   }
 
-  componentDidMount(){
-    fetch("https://nameless-citadel-65461.herokuapp.com")
-    .then(res => res.json())
-    .then(data => console.log(data));
-  }
+  // componentDidMount(){
+  //   fetch("https://nameless-citadel-65461.herokuapp.com")
+  //   .then(res => res.json())
+  //   .then(data => console.log(data));
+  // }
 
   particlesInit = (main) => {
     // you can initialize the tsParticles instance (main) here, adding custom shapes or presets
@@ -80,16 +80,17 @@ class App extends React.Component{
     this.setState({input: event.target.value})
   }
 //Clarifai initialisation and set imageUrl 
-  onbuttonSubmit = (event) => {
+  onbuttonSubmit = (e) => {
+    e.preventDefault();
     this.setState({imageUrl : this.state.input})
-      
+    if(this.state.input!=""){
     fetch('https://nameless-citadel-65461.herokuapp.com/imageurl', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         input: this.state.input
+      })
     })
-  })
     .then(res => res.json())
       .then(res => {
         if(res){
@@ -102,12 +103,15 @@ class App extends React.Component{
         })
         .then(res => res.json())
         .then(count => {
-          this.setState(Object.assign(this.state.user, {entries: count}))
+          if(this.state.input){
+            this.setState(Object.assign(this.state.user, {entries: count}))
+          }
         })
         }
         this.displayFaceBox(this.calculateFaceLocation(res))
       })
       .catch(err => console.log(err))
+    }
   }
 //function for set change to signIn & signout
 
@@ -141,8 +145,8 @@ class App extends React.Component{
                         <Rank name={this.state.user.name} entries={this.state.user.entries}/>
                       <ImageLinkForm 
                         onInputChange={this.onInputChange} 
-                        onbuttonSubmit={this.onbuttonSubmit}/
-                      >
+                        onbuttonSubmit={this.onbuttonSubmit}
+                        />
                       <FaceRecognition imageUrl={this.state.imageUrl} box={this.state.box}/>
                     </div>
                 )
