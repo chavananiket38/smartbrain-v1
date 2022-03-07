@@ -54,17 +54,17 @@ class App extends React.Component{
   };
 
   calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions.map( (box) => { return box.region_info.bounding_box})
-    
+    const clarifaiFace = data.outputs[0].data.regions.map( (box) => { return [box.region_info.bounding_box, box.data.concepts[0].name]})
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
     const box = clarifaiFace.map((face) => {
       return {
-      leftCol: face.left_col * width,
-      topRow: face.top_row * height,
-      rightCol: width - (face.right_col * width),
-      bottomRow: height - (face.bottom_row * height)
+      leftCol: face[0].left_col * width,
+      topRow: face[0].top_row * height,
+      rightCol: width - (face[0].right_col * width),
+      bottomRow: height - (face[0].bottom_row * height),
+      name : face[1]
       }
     });
     return box;
@@ -94,7 +94,7 @@ class App extends React.Component{
     .then(res => res.json())
       .then(res => {
         if(res){
-          fetch(" https://nameless-citadel-65461.herokuapp.com/image", {
+          fetch("https://nameless-citadel-65461.herokuapp.com/image", {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

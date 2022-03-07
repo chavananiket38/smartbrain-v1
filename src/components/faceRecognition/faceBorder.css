@@ -16,3 +16,17 @@
 .imageContent2{
     position: absolute;
 }
+
+
+h1 span { 
+    background-color: rgb(9, 91, 146); 
+    color: rgb(255, 255, 255);
+    white-space: nowrap;
+    font-size: 0.75rem;
+    line-height: 0.75rem;
+    display: flex;
+    align-items: baseline;
+    font-weight: 700;
+    padding: 1px 3px;
+    border-radius: 2px 2px 0 0;
+}
