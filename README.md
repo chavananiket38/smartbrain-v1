@@ -1,6 +1,10 @@
-# Live Project Link
+### [Live Project Link](https://chavananiket38.github.io/smartbrain-v1/)  <- click here
 
-https://chavananiket38.github.io/smartbrain-v1/
+![smartbrain](https://i.ibb.co/pz3k3bk/Screenshot-12.png)
+
+![smartbrain](https://i.ibb.co/fFFLdSs/Screenshot-10.png)
+
+![smartbrain](https://i.ibb.co/LgjCFhZ/Screenshot-11.png)
 
 # SmartBrain 
 
